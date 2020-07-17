@@ -20,7 +20,7 @@ class FeedService {
         val feed = crudHandler.showBy(where {
             "name" Equal name
         }, Feed::class.java)
-                .execute()
+                .execute() ?: error("View $name not found")
         return object : AbstractRssFeedView() {
             override fun buildFeedMetadata(model: MutableMap<String, Any>, channel: Channel, request: HttpServletRequest) {
                 channel.title = feed.title
@@ -31,20 +31,21 @@ class FeedService {
             override fun buildFeedItems(model: MutableMap<String, Any>, request: HttpServletRequest, response: HttpServletResponse): MutableList<Item> {
                 val items = mutableListOf<Item>()
                 for (item in feed.items) {
-                    val entry = Item()
-                    entry.title = item.title
-                    entry.source = Source().apply {
-                        value = item.source
+                    val entry = Item().apply {
+                        title = item.title
+                        source = Source().apply {
+                            value = item.source
+                        }
+                        description = Description().apply {
+                            value = item.text
+                        }
+                        author = item.source // Temporary since we don't use source
+                        link = item.url
+                        guid = Guid().apply {
+                            value = item.guid
+                        }
+                        pubDate = item.publicationDate
                     }
-                    entry.description = Description().apply {
-                        value = item.text
-                    }
-                    entry.author = item.source // Temporary since we don't use source
-                    entry.link = item.url
-                    entry.guid = Guid().apply {
-                        value = item.guid
-                    }
-                    entry.pubDate = item.publicationDate
                     items += entry
                 }
                 return items
