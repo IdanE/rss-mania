@@ -23,6 +23,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.antelopesystem.crudframework:crud-framework-web:0.1.1-SNAPSHOT")
     implementation("com.antelopesystem.crudframework:crud-framework-mongo-connector:0.1.1-SNAPSHOT")
     implementation("com.rometools:rome:1.15.0")
     implementation("com.google.code.gson:gson:2.8.6")

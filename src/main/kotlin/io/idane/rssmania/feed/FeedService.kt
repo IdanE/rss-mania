@@ -4,6 +4,7 @@ import com.antelopesystem.crudframework.crud.handler.CrudHandler
 import com.antelopesystem.crudframework.modelfilter.dsl.where
 import com.rometools.rome.feed.rss.*
 import io.idane.rssmania.feed.model.Feed
+import io.idane.rssmania.feed.ro.FeedRO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.View
@@ -16,11 +17,19 @@ class FeedService {
     @Autowired
     private lateinit var crudHandler: CrudHandler
 
-    fun getFeedView(name: String): View {
-        val feed = crudHandler.showBy(where {
+    fun getFeedROByName(name: String): FeedRO {
+        return crudHandler.getRO(getFeedByName(name), FeedRO::class.java)
+    }
+
+    fun getFeedByName(name: String): Feed {
+        return crudHandler.showBy(where {
             "name" Equal name
         }, Feed::class.java)
-                .execute() ?: error("View $name not found")
+                .execute() ?: error("Feed $name not found")
+    }
+
+    fun getFeedView(name: String): View {
+        val feed = getFeedByName(name)
         return object : AbstractRssFeedView() {
             override fun buildFeedMetadata(model: MutableMap<String, Any>, channel: Channel, request: HttpServletRequest) {
                 channel.title = feed.title
@@ -52,5 +61,6 @@ class FeedService {
             }
         }
     }
+
 
 }

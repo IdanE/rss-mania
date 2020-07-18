@@ -1,20 +1,22 @@
 package io.idane.rssmania.controller
 
+import com.antelopesystem.crudframework.web.controller.BaseCRUDController
+import com.antelopesystem.crudframework.web.ro.ResultRO
 import io.idane.rssmania.feed.FeedService
+import io.idane.rssmania.feed.model.Feed
+import io.idane.rssmania.feed.ro.FeedRO
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.servlet.View
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class FeedController {
+@RequestMapping("/feeds")
+class FeedController : BaseCRUDController<String, Feed, FeedRO>() {
+
     @Autowired
     private lateinit var feedService: FeedService
 
-    @GetMapping("/{name}")
-    fun getFeed(@PathVariable name: String): View {
-        return feedService.getFeedView(name)
+    @GetMapping("by-name/{name}")
+    fun getFeedByName(@PathVariable name: String): ResultRO<*>? {
+        return wrapResult { return@wrapResult feedService.getFeedROByName(name) }
     }
-
 }
