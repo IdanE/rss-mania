@@ -1,10 +1,8 @@
 package io.idane.rssmania.feed.source.provider
 
-import com.antelopesystem.crudframework.components.componentmap.ComponentMap
 import com.antelopesystem.crudframework.crud.handler.CrudHandler
 import io.idane.rssmania.feed.model.Feed
 import io.idane.rssmania.feed.model.FeedItem
-import io.idane.rssmania.feed.source.enums.FeedSourceType
 import io.idane.rssmania.feed.source.model.FeedSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,6 +51,7 @@ class FeedSourceProviderHandler {
             try {
                 val providerItems = provider.fetch(source)
                 log.info("${providerItems.size} items fetched from provider [ ${source.title} (${source.type}) ] of feed [ ${feed.name} ]")
+                items += providerItems
             } catch(e: Exception) {
                 log.info("Source [ ${source.title} (${source.type}) ] of feed [ ${feed.name} ] failed to fetch! Error: ${e.message}")
             }

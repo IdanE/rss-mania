@@ -50,7 +50,7 @@ class RedditProvider : FeedSourceProvider {
     }
 
     private fun getSubreddit(source: FeedSource): String {
-        val subreddit = source[PARAMETERS.SUBREDDIT] ?: throw RuntimeException("Reddit Subreddit is not set")
+        val subreddit = source[PARAMETERS.SUBREDDIT] ?: error("Reddit Subreddit is not set")
         return subreddit.toString()
     }
 }
